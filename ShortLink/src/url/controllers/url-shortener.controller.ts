@@ -14,6 +14,7 @@ import { UrlRepo } from '../repositories/url-repo';
 import { IUrlResponse } from '../interfaces/url.response.interface';
 import { UrlDocument } from '../repositories/url-schema';
 import { AppConfigService } from 'src/core/config/config.service';
+import { ValidationPipe } from '../pipes/validation.pipe';
 
 @Controller('url')
 export class UrlShortenerController {
@@ -33,7 +34,7 @@ export class UrlShortenerController {
    */
   @Post('encode')
   async createTinyUrl(
-    @Body() urlDto: UrlDto,
+    @Body(new ValidationPipe()) urlDto: UrlDto,
   ): Promise<IUrlResponse> {
     const { shortUrl, longUrl } = urlDto;
     const baseUrl = this.config.baseUrl;
