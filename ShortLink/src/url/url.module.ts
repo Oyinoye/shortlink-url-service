@@ -5,13 +5,14 @@ import { UrlRepo } from './repositories/url-repo';
 import { Url, UrlSchema } from './repositories/url-schema';
 import { UrlService } from './services/url-service/url-service.service';
 import { ConfigModule } from '../core/config/config.module';
+import { UrlRedirectController } from './controllers/url-redirect.controller';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Url.name, schema: UrlSchema }]),
     ConfigModule.forRoot(),
   ],
-  controllers: [UrlShortenerController],
+  controllers: [UrlShortenerController, UrlRedirectController],
   providers: [UrlRepo, UrlService],
 })
 export class UrlModule {}

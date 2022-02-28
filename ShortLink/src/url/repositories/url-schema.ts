@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type UrlDocument = Url & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Url {
   @Prop({
     required: true,
@@ -23,6 +23,8 @@ export class Url {
     unique: true,
   })
   hash: string;
+
+  createdAt: Date;
 }
 
 export const UrlSchema = SchemaFactory.createForClass(Url);

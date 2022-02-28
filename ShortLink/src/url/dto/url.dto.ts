@@ -21,4 +21,5 @@ export class UrlDto {
   @IsString()
   @IsOptional()
   hash: string;
+  
 }

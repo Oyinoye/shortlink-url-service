@@ -47,6 +47,14 @@ export class UrlService {
     });
   }
 
+  public isValidShortUrl(shortUrl: string): boolean {
+    return (
+      Object.prototype.toString.call(shortUrl) === '[object String]' &&
+      shortUrl.length === 7 &&
+      this.charsetRegex.test(shortUrl)
+    );
+  }
+
   public async getIfExists(hash: string): Promise<UrlDocument | null> {
     // This is one way to get around the tracking of accessing a short url.
     // Depending on what do we want to track, we can change this search to
@@ -62,6 +70,7 @@ export class UrlService {
   ): Promise<UrlDocument> {
     return new Promise(async (resolve, reject) => {
       const shortUrl = this.getShortUrl();
+      const created = new Date()
 
       try {
         const savedUrl: UrlDocument = await this.urlRepo.saveUrl({

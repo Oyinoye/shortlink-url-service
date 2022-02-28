@@ -87,4 +87,34 @@ export class UrlShortenerController {
     }
   }
 
+  @Post('decode')
+  async getLongUrl(@Body() urlDto: UrlDto): Promise<IUrlResponse> {
+    let { shortUrl } = urlDto;
+    shortUrl = shortUrl.split("/")[3]
+    const baseUrl = this.config.baseUrl;
+
+    if (!this.urlSvc.isValidShortUrl(shortUrl)) {
+      throw new BadRequestException({
+        response: {
+          message: 'Bad Request. Specify a valid short url',
+        },
+      });
+    }
+
+    const savedUrl: UrlDocument = await this.urlRepo.findLongUrl(shortUrl);
+
+    if (savedUrl) {
+      return {
+        longUrl: savedUrl.longUrl,
+        shortUrl: `${baseUrl}${savedUrl.shortUrl}`,
+      };
+    } else {
+      throw new NotFoundException({
+        response: {
+          message: 'No record found with the given short url',
+        },
+      });
+    }
+  }
+
 }
