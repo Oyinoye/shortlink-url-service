@@ -12,18 +12,22 @@ import { UrlRepo } from '../../url/repositories/url-repo';
 import { UrlDocument } from '../repositories/url-schema';
 import { UrlService } from '../../url/services/url-service/url-service.service';
 import { IUrlStatInterface } from '../interfaces/url.stat.interface';
-import { AppConfigService } from 'src/core/config/config.service';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('')
+@ApiTags('Url')
 export class UrlRedirectController {
-  constructor(private urlSvc: UrlService, private urlRepo: UrlRepo, private config: AppConfigService) {}
-
+  constructor(private urlSvc: UrlService, private urlRepo: UrlRepo) {}
+  
   @Get(':shortUrl')
+  @ApiResponse({
+    status: 200,
+    description: 'Redirects to the long url web page when short code is appended as parameter.',
+  })
   async redirectToLongUrl(
     @Param('shortUrl') shortUrl: string,
     @Res() response: Response,
   ): Promise<void> {
-    console.log(shortUrl);
     if (!this.urlSvc.isValidShortUrl(shortUrl)) {
       throw new BadRequestException({
         response: {
@@ -39,6 +43,11 @@ export class UrlRedirectController {
   }
 
   @Get('statistic/:shortUrl')
+  @ApiResponse({
+    status: 200,
+    description: 'Get the basic stat of a url: Length of long url, base url and date url was encoded.',
+    type: IUrlStatInterface,
+  })
   async getUrlStatistic(@Param('shortUrl') shortUrl: string): Promise<IUrlStatInterface> {
 
     const existingShortenedUrl = await this.urlRepo.findLongUrl(shortUrl)
@@ -50,7 +59,6 @@ export class UrlRedirectController {
         created: existingShortenedUrl.createdAt,
       };
     } else {
-      console.log(existingShortenedUrl)
       throw new NotFoundException({
         response: {
           message: 'No record found with the given short url',

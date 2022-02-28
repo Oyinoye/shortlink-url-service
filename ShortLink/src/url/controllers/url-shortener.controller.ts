@@ -13,10 +13,12 @@ import { UrlService } from '../services/url-service/url-service.service';
 import { UrlRepo } from '../repositories/url-repo';
 import { IUrlResponse } from '../interfaces/url.response.interface';
 import { UrlDocument } from '../repositories/url-schema';
-import { AppConfigService } from 'src/core/config/config.service';
+import { AppConfigService } from '../../core/config/config.service';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('url')
+@ApiTags('Url')
 export class UrlShortenerController {
   constructor(
     private urlSvc: UrlService,
@@ -33,6 +35,11 @@ export class UrlShortenerController {
    *
    */
   @Post('encode')
+  @ApiResponse({
+    status: 201,
+    description: 'Encodes the long url to a short one.',
+    type: IUrlResponse,
+  })
   async createTinyUrl(
     @Body(new ValidationPipe()) urlDto: UrlDto,
   ): Promise<IUrlResponse> {
@@ -88,6 +95,11 @@ export class UrlShortenerController {
   }
 
   @Post('decode')
+  @ApiResponse({
+    status: 200,
+    description: 'Gets the long url from the supplied short url.',
+    type: IUrlResponse,
+  })
   async getLongUrl(@Body() urlDto: UrlDto): Promise<IUrlResponse> {
     let { shortUrl } = urlDto;
     shortUrl = shortUrl.split("/")[3]

@@ -16,9 +16,9 @@ A Url Shortener that has:
 - [ ] Encoding endpoint: An endpoint to generate a short URL from an existing URL
 - [ ] Decoding endpoint: n endpoint that, given the short URL, will redirect to the original URL
 - [ ] Stat enpoint: An endpoint that displays the following information (see example):
-  - the original URL
-  - the short URL
-  - the number of times the URL was visited, broken down for each day in the last 3 days
+  - the length of the original URL
+  - the base url
+  - the time the url was encoded
 
 ## Installation
 
@@ -47,6 +47,9 @@ $ npm run test
 
 ```
 
-## Documentation
+## API DOCUMENTATION
 
+Access swagger documentation on /api endpoint.
 
+If default localhost port is used, documentation url would be:
+http://localhost:3000/api/
